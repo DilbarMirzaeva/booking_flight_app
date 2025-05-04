@@ -1,4 +1,6 @@
 package az.turing.booking_flight_spring_boot.domain.repository;
 
-public class PassengerRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PassengerRepository extends JpaRepository {
 }
