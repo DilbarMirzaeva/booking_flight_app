@@ -4,6 +4,9 @@ import az.turing.booking_flight_spring_boot.domain.entity.Flight;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+
 @Repository
 public interface FlightRepository extends JpaRepository<Flight,Long> {
+    boolean existsByOriginAndDestinationAndDepartureDate(String origin, String destination, LocalDateTime departureDate);
 }
