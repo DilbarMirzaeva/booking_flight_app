@@ -29,10 +29,16 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: time
-                  type: DATETIME
+                  name: departure_time
+                  type: TIMESTAMP
                   constraints:
                     nullable: false
+              - column:
+                  name: arrival_time
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+
 
   - changeSet:
       id: 2
