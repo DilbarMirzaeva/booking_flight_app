@@ -18,9 +18,13 @@ public class Booking {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "flight_id",nullable = false)
+    @JoinColumn(name = "flight_id", nullable = false)
     private Flight flight;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
     private List<Passenger> passengers;
+    @Column(name = "price", nullable = false)
+    private Long price;
+    @Column(name = "numberofSeats", nullable = false)
+    private Long numberofSeats;
 }
