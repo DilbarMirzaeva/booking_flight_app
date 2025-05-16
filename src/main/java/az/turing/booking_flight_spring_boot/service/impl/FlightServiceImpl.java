@@ -21,7 +21,7 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public void saveFlight(FlightRequest flightRequest) {
-        if (flightRepo.existsByOriginAndDestinationAndDepartureDate(flightRequest.getOrigin(),flightRequest.getDestination(),flightRequest.getDepartureTime())){
+        if (flightRepo.existsByOriginAndDestinationAndDepartureTime(flightRequest.getOrigin(),flightRequest.getDestination(),flightRequest.getDepartureTime())){
             throw new AlreadyExistsException("Flight already exists");
         }
         Flight flight=new Flight();
@@ -37,7 +37,7 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public void deleteFlight(Long id) {
         if(!flightRepo.existsById(id)){
-            throw new NotFoundException("Flight not found");
+            throw new NotFoundException("Flight not found with id: "+id);
         }
         flightRepo.deleteById(id);
     }
@@ -45,7 +45,7 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public FlightResponse updateFlight(Long id,FlightRequest flightRequest) {
         Flight flight=flightRepo.findById(id)
-                .orElseThrow(()->new NotFoundException("Flight not found"));
+                .orElseThrow(()->new NotFoundException("Flight not found with id:"+ id));
         flight.setOrigin(flightRequest.getOrigin());
         flight.setDestination(flightRequest.getDestination());
         flight.setAvailableSeats(flightRequest.getAvailableSeats());
@@ -59,7 +59,7 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public FlightResponse getFlightById(Long id) {
         Flight flight=flightRepo.findById(id)
-                .orElseThrow(()->new NotFoundException("Flight not found"));
+                .orElseThrow(()->new NotFoundException("Flight not found with id: "+id));
         return flightMapper.toDto(flight);
     }
 

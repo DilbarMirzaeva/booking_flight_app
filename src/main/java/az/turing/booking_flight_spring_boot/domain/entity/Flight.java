@@ -1,7 +1,9 @@
 package az.turing.booking_flight_spring_boot.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,13 +34,7 @@ public class Flight {
     @Column(name="arrival_time",nullable = false)
     private LocalDateTime arrivalTime;
 
-    @Column(name = "seat_price", nullable = false)
-    private Long seatPrice;
-
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     private List<Booking> bookingList;
-
 
 }
