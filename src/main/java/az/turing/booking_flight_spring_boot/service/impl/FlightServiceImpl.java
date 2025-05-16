@@ -30,6 +30,7 @@ public class FlightServiceImpl implements FlightService {
         flight.setDestination(flightRequest.getDestination());
         flight.setAvailableSeats(flightRequest.getAvailableSeats());
         flight.setDepartureTime(flightRequest.getDepartureTime());
+        flight.setSeatPrice(flightRequest.getSeatPrice());
         flightRepo.save(flight);
     }
 
@@ -50,6 +51,7 @@ public class FlightServiceImpl implements FlightService {
         flight.setAvailableSeats(flightRequest.getAvailableSeats());
         flight.setArrivalTime(flightRequest.getArrivalTime());
         flight.setDepartureTime(flightRequest.getDepartureTime());
+        flight.setSeatPrice(flightRequest.getSeatPrice());
         flightRepo.save(flight);
         return flightMapper.toDto(flight);
     }
