@@ -27,4 +27,6 @@ public class Booking {
     private Long price;
     @Column(name = "numberofSeats", nullable = false)
     private Long numberofSeats;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 }
