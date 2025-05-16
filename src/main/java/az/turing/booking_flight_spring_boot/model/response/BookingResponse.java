@@ -1,6 +1,8 @@
 package az.turing.booking_flight_spring_boot.model.response;
 
 
+import az.turing.booking_flight_spring_boot.domain.entity.Flight;
+import az.turing.booking_flight_spring_boot.domain.entity.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,4 +17,6 @@ public class BookingResponse {
         private List<PassengerResponse> passengers;
         private Long price;
         private Long numberofSeats;
+        private Flight flight;
+        private Status status;
 }
