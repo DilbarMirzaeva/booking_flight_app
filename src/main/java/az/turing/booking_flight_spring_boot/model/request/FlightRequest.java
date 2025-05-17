@@ -15,4 +15,5 @@ public class FlightRequest {
     private Integer availableSeats;
     private LocalDateTime departureTime;
     private LocalDateTime arrivalTime;
+    private Long seatPrice;
 }

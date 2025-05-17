@@ -4,7 +4,7 @@ databaseChangeLog:
       author: system
       changes:
         - createTable:
-            tableName: flight
+            tableName: flights
             columns:
               - column:
                   name: id
@@ -45,7 +45,7 @@ databaseChangeLog:
       author: system
       changes:
         - createTable:
-            tableName: booking
+            tableName: bookings
             columns:
               - column:
                   name: id
@@ -60,14 +60,13 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: seats_number
-                  type: INTEGER
+                  name: number_of_seats
+                  type: bigint
                   constraints:
                     nullable: false
               - column:
-                  name: created_at
-                  type: DATETIME
-                  defaultValueComputed: "CURRENT_TIMESTAMP"
+                  name: price
+                  type: bigint
                   constraints:
                     nullable: false
 
@@ -76,7 +75,7 @@ databaseChangeLog:
       author: system
       changes:
         - createTable:
-            tableName: passenger
+            tableName: passengers
             columns:
               - column:
                   name: id
@@ -107,13 +106,13 @@ databaseChangeLog:
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: flight_id
-            baseTableName: booking
+            baseTableName: bookings
             constraintName: fk_booking_flight
             referencedColumnNames: id
-            referencedTableName: flight
+            referencedTableName: flights
         - addForeignKeyConstraint:
             baseColumnNames: booking_id
-            baseTableName: passenger
+            baseTableName: passengers
             constraintName: fk_passenger_booking
             referencedColumnNames: id
-            referencedTableName: booking
+            referencedTableName: bookings
