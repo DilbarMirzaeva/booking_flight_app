@@ -23,10 +23,13 @@ public class Booking {
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
     private List<Passenger> passengers;
+
     @Column(name = "price", nullable = false)
     private Long price;
+
     @Column(name = "numberofSeats", nullable = false)
-    private Long numberofSeats;
+    private Long numberOfSeats;
+
     @Enumerated(EnumType.STRING)
     private Status status;
 }
