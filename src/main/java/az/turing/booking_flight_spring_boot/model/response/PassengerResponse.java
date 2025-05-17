@@ -11,4 +11,5 @@ public class PassengerResponse {
     private Long id;
     private String name;
     private String surname;
+    private Long balance;
 }
