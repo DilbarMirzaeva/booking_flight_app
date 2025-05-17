@@ -60,14 +60,13 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: seats_number
-                  type: INTEGER
+                  name: number_of_seats
+                  type: bigint
                   constraints:
                     nullable: false
               - column:
-                  name: created_at
-                  type: DATETIME
-                  defaultValueComputed: "CURRENT_TIMESTAMP"
+                  name: price
+                  type: bigint
                   constraints:
                     nullable: false
 

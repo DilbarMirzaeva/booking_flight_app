@@ -34,6 +34,9 @@ public class Flight {
     @Column(name="arrival_time",nullable = false)
     private LocalDateTime arrivalTime;
 
+    @Column(name="seat_price",nullable = false)
+    private Long seatPrice;
+
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
     private List<Booking> bookingList;
 
