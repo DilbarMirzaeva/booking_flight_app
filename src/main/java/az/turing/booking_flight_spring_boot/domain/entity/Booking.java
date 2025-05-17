@@ -28,7 +28,7 @@ public class Booking {
     private Long price;
 
     @Column(name = "number_of_seats", nullable = false)
-    private Long numberOfSeats;
+    private Integer numberOfSeats;
 
     @Enumerated(EnumType.STRING)
     private Status status;
