@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class PassengerRequest {
     private String name;
     private String surname;
+    private Long balance;
 }

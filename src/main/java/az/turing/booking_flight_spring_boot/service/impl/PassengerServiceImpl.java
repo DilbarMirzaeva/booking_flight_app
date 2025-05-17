@@ -23,6 +23,7 @@ public class PassengerServiceImpl implements PassengerService {
         Passenger passenger=new Passenger();
         passenger.setName(passengerRequest.getName());
         passenger.setSurname(passengerRequest.getSurname());
+        passenger.setBalance(passengerRequest.getBalance());
         passengerRepo.save(passenger);
     }
 
@@ -41,6 +42,7 @@ public class PassengerServiceImpl implements PassengerService {
                 .orElseThrow(()->new NotFoundException("Passenger not found"));
         passenger.setName(passengerRequest.getName());
         passenger.setSurname(passengerRequest.getSurname());
+        passenger.setBalance(passengerRequest.getBalance());
         passengerRepo.save(passenger);
         return passengerMapper.toDto(passenger);
     }
