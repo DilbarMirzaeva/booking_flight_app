@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 @Service
 public interface BookingService {
-     void saveBooking(BookingRequest bookingRequestt);
+     BookingResponse saveBooking(BookingRequest bookingRequestt);
      void deleteBooking(Long id);
      List<BookingResponse> findAllBookings();
      BookingResponse findBookingById(Long id);

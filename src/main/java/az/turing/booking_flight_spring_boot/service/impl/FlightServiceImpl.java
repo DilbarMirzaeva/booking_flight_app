@@ -66,4 +66,5 @@ public class FlightServiceImpl implements FlightService {
         List<Flight> flights=flightRepo.findAll();
         return flightMapper.toListDto(flights);
     }
+
 }

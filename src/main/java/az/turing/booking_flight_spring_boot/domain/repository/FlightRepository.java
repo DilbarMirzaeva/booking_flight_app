@@ -8,5 +8,5 @@ import java.time.LocalDateTime;
 
 @Repository
 public interface FlightRepository extends JpaRepository<Flight,Long> {
-    boolean existsByOriginAndDestinationAndDepartureDate(String origin, String destination, LocalDateTime departureDate);
+    boolean existsByOriginAndDestinationAndDepartureTime(String origin, String destination, LocalDateTime departureDate);
 }

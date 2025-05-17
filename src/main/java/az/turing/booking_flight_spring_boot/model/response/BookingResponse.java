@@ -13,10 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 public class BookingResponse {
         private Long bookingId;
-        private Long flightId;
-        private List<PassengerResponse> passengers;
         private Long price;
-        private Long numberofSeats;
-        private Flight flight;
+        private Long numberOfSeats;
+        private FlightResponse flightResponse;
         private Status status;
 }

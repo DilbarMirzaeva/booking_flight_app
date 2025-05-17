@@ -11,6 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 public class BookingRequest {
     private Long flightId;
-    private List<PassengerRequest> passengers;
+    private Long passengerId;
     private Integer numberOfSeats;
 }
