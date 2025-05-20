@@ -6,10 +6,12 @@ import az.turing.booking_flight_spring_boot.domain.entity.Passenger;
 import az.turing.booking_flight_spring_boot.domain.entity.Status;
 import az.turing.booking_flight_spring_boot.domain.repository.BookingRepository;
 import az.turing.booking_flight_spring_boot.domain.repository.FlightRepository;
+import az.turing.booking_flight_spring_boot.domain.repository.PassengerRepository;
+import az.turing.booking_flight_spring_boot.exception.AlreadyExistsException;
+import az.turing.booking_flight_spring_boot.exception.InsufficientBalanceException;
 import az.turing.booking_flight_spring_boot.exception.NotFoundException;
 import az.turing.booking_flight_spring_boot.exception.SeatUnavailableException;
 import az.turing.booking_flight_spring_boot.mapper.BookingMapper;
-import az.turing.booking_flight_spring_boot.mapper.PassengerMapper;
 import az.turing.booking_flight_spring_boot.model.request.BookingRequest;
 import az.turing.booking_flight_spring_boot.model.response.BookingResponse;
 import az.turing.booking_flight_spring_boot.service.BookingService;
@@ -23,7 +25,9 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final BookingMapper bookingMapper;
     private final FlightRepository flightRepository;
+    private final PassengerRepository passengerRepository;
     @Override
+    @Transactional
     public BookingResponse saveBooking(BookingRequest bookingRequest) {
         Flight flight= flightRepository.findById(bookingRequest.getFlightId())
                 .orElseThrow(()->new NotFoundException("Flight not found"));
@@ -39,6 +43,15 @@ public class BookingServiceImpl implements BookingService {
                     passenger1.setBalance(passenger.getBalance());
                     return passenger1;
                 }).toList();
+//        Passenger passenger=passengers.get(0);
+//        if(passenger.getBalance()<price){
+//            throw new IsufficientBalanceException("Passenger has not enough balance");
+//        }
+        passengers.forEach(p->{
+            if(p.getBalance()<price){
+                throw new InsufficientBalanceException("Passenger has not enough balance");
+            }
+        });
         Booking booking=new Booking();
         booking.setFlight(flight);
         booking.setStatus(Status.BOUGHT);
@@ -46,18 +59,32 @@ public class BookingServiceImpl implements BookingService {
         booking.setPassengers(passengers);
         booking.setPrice(price);
         flight.setAvailableSeats(flight.getAvailableSeats()-bookingRequest.getNumberOfSeats());
+        passengers.forEach(p -> p.setBooking(booking));
+        booking.setPassengers(passengers);
         Booking savedBooking=bookingRepository.save(booking);
+
+//        Passenger passenger1 = savedBooking.getPassengers().get(0);
+//        passenger1.setBalance(passenger1.getBalance()-savedBooking.getPrice());
+//        passengerRepository.save(passenger1);
+        passengers.forEach(p->{
+            p.setBalance(p.getBalance()-savedBooking.getPrice());
+        });
+        passengerRepository.saveAll(passengers);
         return bookingMapper.toDto(savedBooking);
-
-
     }
     @Override
     @Transactional
     public void deleteBooking(Long id) {
-        if(!bookingRepository.existsById(id)) {
-            throw new NotFoundException("Booking has not found");
+        Booking deletedBooking=bookingRepository.findById(id)
+                .orElseThrow(()->new NotFoundException("Booking not found"));
+        if(deletedBooking.getStatus()==Status.DELETED){
+            throw new AlreadyExistsException("Booking has been deleted already");
         }
-        bookingRepository.deleteById(id);
+        deletedBooking.getPassengers().get(0)
+                .setBalance(deletedBooking.getPassengers().get(0).getBalance()+deletedBooking.getPrice() );
+        deletedBooking.getFlight().setAvailableSeats(deletedBooking.getFlight().getAvailableSeats()+deletedBooking.getNumberOfSeats());
+        deletedBooking.setStatus(Status.DELETED);
+        bookingRepository.save(deletedBooking);
     }
 
     @Override
