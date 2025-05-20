@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 public class BookingController {
     private final BookingService bookingService;
-    @GetMapping({"/id"})
-    public ResponseEntity<BookingResponse> getById(Long id){
+    @GetMapping("{id}")
+    public ResponseEntity<BookingResponse> getById(@PathVariable Long id){
         return ResponseEntity.ok(bookingService.findBookingById(id));
     }
     @GetMapping({"/all"})

@@ -8,7 +8,7 @@ import az.turing.booking_flight_spring_boot.domain.repository.BookingRepository;
 import az.turing.booking_flight_spring_boot.domain.repository.FlightRepository;
 import az.turing.booking_flight_spring_boot.domain.repository.PassengerRepository;
 import az.turing.booking_flight_spring_boot.exception.AlreadyExistsException;
-import az.turing.booking_flight_spring_boot.exception.IsufficientBalanceException;
+import az.turing.booking_flight_spring_boot.exception.InsufficientBalanceException;
 import az.turing.booking_flight_spring_boot.exception.NotFoundException;
 import az.turing.booking_flight_spring_boot.exception.SeatUnavailableException;
 import az.turing.booking_flight_spring_boot.mapper.BookingMapper;
@@ -43,11 +43,15 @@ public class BookingServiceImpl implements BookingService {
                     passenger1.setBalance(passenger.getBalance());
                     return passenger1;
                 }).toList();
-        Passenger passenger=passengers.get(0);
-        if(passenger.getBalance()<price){
-            throw new IsufficientBalanceException("Passenger has not enough balance");
-        }
-        passengerRepository.saveAll(passengers);
+//        Passenger passenger=passengers.get(0);
+//        if(passenger.getBalance()<price){
+//            throw new IsufficientBalanceException("Passenger has not enough balance");
+//        }
+        passengers.forEach(p->{
+            if(p.getBalance()<price){
+                throw new InsufficientBalanceException("Passenger has not enough balance");
+            }
+        });
         Booking booking=new Booking();
         booking.setFlight(flight);
         booking.setStatus(Status.BOUGHT);
@@ -55,12 +59,18 @@ public class BookingServiceImpl implements BookingService {
         booking.setPassengers(passengers);
         booking.setPrice(price);
         flight.setAvailableSeats(flight.getAvailableSeats()-bookingRequest.getNumberOfSeats());
+        passengers.forEach(p -> p.setBooking(booking));
+        booking.setPassengers(passengers);
         Booking savedBooking=bookingRepository.save(booking);
-        savedBooking.getPassengers().get(0)
-                .setBalance(savedBooking.getPassengers().get(0).getBalance()-savedBooking.getPrice());
+
+//        Passenger passenger1 = savedBooking.getPassengers().get(0);
+//        passenger1.setBalance(passenger1.getBalance()-savedBooking.getPrice());
+//        passengerRepository.save(passenger1);
+        passengers.forEach(p->{
+            p.setBalance(p.getBalance()-savedBooking.getPrice());
+        });
+        passengerRepository.saveAll(passengers);
         return bookingMapper.toDto(savedBooking);
-
-
     }
     @Override
     @Transactional

@@ -1,7 +1,7 @@
 package az.turing.booking_flight_spring_boot.mapper;
 
 import az.turing.booking_flight_spring_boot.domain.entity.Booking;
-import az.turing.booking_flight_spring_boot.model.request.BookingRequest;
+
 import az.turing.booking_flight_spring_boot.model.response.BookingResponse;
 import org.mapstruct.Mapper;
 
