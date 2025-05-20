@@ -11,6 +11,8 @@ import az.turing.booking_flight_spring_boot.service.FlightService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -67,5 +69,11 @@ public class FlightServiceImpl implements FlightService {
     public List<FlightResponse> getAllFlights() {
         List<Flight> flights=flightRepo.findAll();
         return flightMapper.toListDto(flights);
+    }
+
+    public FlightResponse flightSearch(String origin, String destination, LocalDateTime dateTime){
+        if (origin==null && destination==null && dateTime==null){
+
+        }
     }
 }

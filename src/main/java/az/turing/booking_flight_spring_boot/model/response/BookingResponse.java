@@ -16,7 +16,7 @@ public class BookingResponse {
         private Long flightId;
         private List<PassengerResponse> passengers;
         private Long price;
-        private Long numberOfSeats;
+        private Integer numberOfSeats;
         private Flight flight;
         private Status status;
 }
