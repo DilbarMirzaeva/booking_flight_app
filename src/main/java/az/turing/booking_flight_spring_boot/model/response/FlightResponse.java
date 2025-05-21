@@ -1,5 +1,6 @@
 package az.turing.booking_flight_spring_boot.model.response;
 
+import az.turing.booking_flight_spring_boot.domain.entity.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,4 +18,5 @@ public class FlightResponse {
     private LocalDateTime departureTime;
     private LocalDateTime arrivalTime;
     private Long seatPrice;
+    private Status status;
 }
