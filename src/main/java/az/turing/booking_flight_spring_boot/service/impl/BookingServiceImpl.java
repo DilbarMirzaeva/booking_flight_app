@@ -26,52 +26,52 @@ public class BookingServiceImpl implements BookingService {
     private final BookingMapper bookingMapper;
     private final FlightRepository flightRepository;
     private final PassengerRepository passengerRepository;
-    @Override
-    @Transactional
-    public BookingResponse saveBooking(BookingRequest bookingRequest) {
-        Flight flight= flightRepository.findById(bookingRequest.getFlightId())
-                .orElseThrow(()->new NotFoundException("Flight not found"));
-        if(flight.getAvailableSeats()<bookingRequest.getNumberOfSeats()){
-            throw new SeatUnavailableException("Flight has not enough seats");
-        }
-        Long price=flight.getSeatPrice()*bookingRequest.getNumberOfSeats();
-        List<Passenger> passengers= bookingRequest.getPassengers()
-                .stream().map(passenger ->{
-                    Passenger passenger1=new Passenger();
-                    passenger1.setName(passenger.getName());
-                    passenger1.setSurname(passenger.getSurname());
-                    passenger1.setBalance(passenger.getBalance());
-                    return passenger1;
-                }).toList();
-//        Passenger passenger=passengers.get(0);
-//        if(passenger.getBalance()<price){
-//            throw new IsufficientBalanceException("Passenger has not enough balance");
-//        }
-        passengers.forEach(p->{
-            if(p.getBalance()<price){
-                throw new InsufficientBalanceException("Passenger has not enough balance");
-            }
-        });
-        Booking booking=new Booking();
-        booking.setFlight(flight);
-        booking.setStatus(Status.BOUGHT);
-        booking.setNumberOfSeats(bookingRequest.getNumberOfSeats());
-        booking.setPassengers(passengers);
-        booking.setPrice(price);
-        flight.setAvailableSeats(flight.getAvailableSeats()-bookingRequest.getNumberOfSeats());
-        passengers.forEach(p -> p.setBooking(booking));
-        booking.setPassengers(passengers);
-        Booking savedBooking=bookingRepository.save(booking);
 
-//        Passenger passenger1 = savedBooking.getPassengers().get(0);
-//        passenger1.setBalance(passenger1.getBalance()-savedBooking.getPrice());
-//        passengerRepository.save(passenger1);
-        passengers.forEach(p->{
-            p.setBalance(p.getBalance()-savedBooking.getPrice());
-        });
-        passengerRepository.saveAll(passengers);
-        return bookingMapper.toDto(savedBooking);
-    }
+
+        @Override
+        @Transactional
+        public BookingResponse saveBooking(BookingRequest bookingRequest) {
+            Flight flight= flightRepository.findById(bookingRequest.getFlightId())
+                    .orElseThrow(()->new NotFoundException("Flight not found"));
+
+            if(flight.getAvailableSeats()<bookingRequest.getNumberOfSeats()){
+                throw new SeatUnavailableException("Flight has not enough seats");
+            }
+
+            Long price=flight.getSeatPrice()*bookingRequest.getNumberOfSeats();
+            List<Passenger> passengers= bookingRequest.getPassengers()
+                    .stream().map(passenger ->{
+                        Passenger passenger1=new Passenger();
+                        passenger1.setName(passenger.getName());
+                        passenger1.setSurname(passenger.getSurname());
+                        passenger1.setBalance(passenger.getBalance());
+                        return passenger1;
+                    }).toList();
+            passengers.forEach(p->{
+                if(p.getBalance()<price){
+                    throw new InsufficientBalanceException("Passenger: "+p.getName()+" has not enough balance");
+                }
+            });
+
+            Booking booking=new Booking();
+
+            booking.setStatus(Status.BOUGHT);
+            booking.setNumberOfSeats(bookingRequest.getNumberOfSeats());
+            booking.setPrice(price);
+            flight.setAvailableSeats(flight.getAvailableSeats()-bookingRequest.getNumberOfSeats());
+            flightRepository.save(flight);
+            booking.setFlight(flight);
+            booking.setPassengers(passengers);
+            passengers.forEach(p -> p.setBooking(booking));
+
+            Booking savedBooking=bookingRepository.save(booking);
+            passengers.forEach(p->{
+                p.setBalance(p.getBalance()-savedBooking.getPrice());
+            });
+            passengerRepository.saveAll(passengers);
+            return bookingMapper.toDto(savedBooking);
+        }
+
     @Override
     @Transactional
     public void deleteBooking(Long id) {
@@ -80,8 +80,7 @@ public class BookingServiceImpl implements BookingService {
         if(deletedBooking.getStatus()==Status.DELETED){
             throw new AlreadyExistsException("Booking has been deleted already");
         }
-        deletedBooking.getPassengers().get(0)
-                .setBalance(deletedBooking.getPassengers().get(0).getBalance()+deletedBooking.getPrice() );
+        deletedBooking.getPassengers().forEach(p->p.setBalance(p.getBalance()+ deletedBooking.getPrice()));
         deletedBooking.getFlight().setAvailableSeats(deletedBooking.getFlight().getAvailableSeats()+deletedBooking.getNumberOfSeats());
         deletedBooking.setStatus(Status.DELETED);
         bookingRepository.save(deletedBooking);

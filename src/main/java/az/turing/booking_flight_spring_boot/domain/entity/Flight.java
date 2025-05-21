@@ -37,6 +37,9 @@ public class Flight {
     @Column(name="seat_price",nullable = false)
     private Long seatPrice;
 
+    @Column(name="status",nullable = false)
+    private Status status;
+
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
     private List<Booking> bookingList;
 
