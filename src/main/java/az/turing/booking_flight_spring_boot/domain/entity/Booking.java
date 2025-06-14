@@ -14,13 +14,22 @@ import java.util.List;
 @NoArgsConstructor
 public class Booking {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "flight_id",nullable = false)
+    @JoinColumn(name = "flight_id", nullable = false)
     private Flight flight;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
     private List<Passenger> passengers;
+
+    @Column(name = "price", nullable = false)
+    private Long price;
+
+    @Column(name = "number_of_seats", nullable = false)
+    private Integer numberOfSeats;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 }
