@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookingResponse {
-        private Long bookingId;
+        private Long id;
         private Long price;
         private Integer numberOfSeats;
         private FlightResponse flight;
